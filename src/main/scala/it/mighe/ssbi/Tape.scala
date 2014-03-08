@@ -1,4 +1,4 @@
-package scala.it.mighe.ssbi
+package it.mighe.ssbi
 
 class Tape {
 
