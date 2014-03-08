@@ -1,15 +1,18 @@
 package it.mighe.ssbi
 
-class ProgramExecutor(private val output: java.io.OutputStream) {
+class ProgramExecutor(private val output: java.io.OutputStream, private val input: java.io.InputStream) {
 
-  var cell: Byte = 0
+  val tape = new Tape
 
   def execute(program: String) {
     for(instruction <- program) {
       instruction match {
-        case '+' => cell = (cell + 1).toByte
-        case '-' => cell = (cell - 1).toByte
-        case '.' => output.write(cell)
+        case '+' => tape.increment()
+        case '-' => tape.decrement()
+        case '>' => tape.shiftRight()
+        case '<' => tape.shiftLeft()
+        case '.' => output.write(tape.current)
+        case ',' => tape.current = input.read()
       }
     }
 
