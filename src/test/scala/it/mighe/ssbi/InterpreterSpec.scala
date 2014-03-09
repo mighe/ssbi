@@ -63,4 +63,8 @@ class InterpreterSpec extends FlatSpec with Matchers {
     verifyProgram("[...[[]]......]", "")
   }
 
+  it can "execute programs with invalid chars" in {
+    verifyProgram("++[XXX>++[XXX.-]XXX<-]", Array(2, 1, 2, 1))
+  }
+
 }

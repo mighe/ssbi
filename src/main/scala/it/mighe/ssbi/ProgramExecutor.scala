@@ -17,13 +17,14 @@ class ProgramExecutor(private val output: java.io.OutputStream, private val inpu
         case '<' => tape.shiftLeft(); programCounter + 1
         case '.' => output.write(tape.current); programCounter + 1
         case ',' => tape.current = input.read(); programCounter + 1
-        case '[' => if(tape.current == 0) matchingClosingFor(programCounter) else programCounter + 1
-        case ']' => if(tape.current != 0) matchingOpeningFor(programCounter) else programCounter + 1
+        case '[' => if(tape.current == 0) matchingClosingIndexFor(programCounter) else programCounter + 1
+        case ']' => if(tape.current != 0) matchingOpeningIndexFor(programCounter) else programCounter + 1
+        case _ => programCounter + 1
       }
 
     }
 
-    def matchingClosingFor(programCounter: Int): Int = {
+    def matchingClosingIndexFor(programCounter: Int): Int = {
       var openedCount = 0
 
       for (index <- programCounter to (program.length - 1)) {
@@ -39,7 +40,7 @@ class ProgramExecutor(private val output: java.io.OutputStream, private val inpu
       -1
     }
 
-    def matchingOpeningFor(programCounter: Int): Int = {
+    def matchingOpeningIndexFor(programCounter: Int): Int = {
       var closedCount = 0
 
       for (index <- programCounter to 0 by -1) {
