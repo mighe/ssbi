@@ -42,10 +42,6 @@ class InterpreterSpec extends FlatSpec with Matchers {
     verifyProgram("+>++.<.", Array(2, 1))
     verifyProgram("+++.-.-.", Array(3, 2, 1))
     verifyProgram("-.+.", Array(255, 0))
-//    verifyProgram("++[>++[.-]<-]", "#{2.chr}#{1.chr}#{2.chr}#{1.chr}")
-//    verifyProgram("[...[[]]......]", "")
-//    verifyProgram("+++++++++++++++[-].", "#{0.chr}")
-//    verifyProgram("++++++++++++++++[>+++++<-].>.", "#{0.chr}#{80.chr}")
   }
 
   it can "execute programs with input" in {
@@ -60,6 +56,11 @@ class InterpreterSpec extends FlatSpec with Matchers {
 
   it can "execute programs with sequential loops" in {
     verifyProgram("+++[>++++<-]>[>+++++++<-]>.", "T")
+  }
+
+  it can "execute programs with nested loops" in {
+    verifyProgram("++[>++[.-]<-]", Array(2, 1, 2, 1))
+    verifyProgram("[...[[]]......]", "")
   }
 
 }
