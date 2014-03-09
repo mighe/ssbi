@@ -13,7 +13,12 @@ class InterpreterSpec extends FlatSpec with Matchers {
   }
 
   def verifyProgram(program: String, expectedOutput: Array[Int]) {
-    verifyProgram(program, expectedOutput.map( _.toByte ))
+    verifyProgram(program, expectedOutput, "")
+  }
+
+  def verifyProgram(program: String, expectedOutput: Array[Int], inputBuffer: String) {
+    val inputBufferArray = new ByteArrayInputStream(inputBuffer.toCharArray.map( _.toByte ))
+    verifyProgram(program, expectedOutput.map( _.toByte ), inputBufferArray)
   }
 
   def verifyProgram(program: String, expectedOutput: Array[Byte]) {
@@ -36,11 +41,8 @@ class InterpreterSpec extends FlatSpec with Matchers {
     verifyProgram("+.", Array(1))
     verifyProgram("+>++.<.", Array(2, 1))
     verifyProgram("+++.-.-.", Array(3, 2, 1))
-//    verifyProgram("[.........]", "")
-//    verifyProgram("++[.-]", "#{2.chr}#{1.chr}")
+    verifyProgram("-.+.", Array(255, 0))
 //    verifyProgram("++[>++[.-]<-]", "#{2.chr}#{1.chr}#{2.chr}#{1.chr}")
-//    verifyProgram(",[-].", "#{0.chr}", "X")
-//    verifyProgram("-.+.", "#{255.chr}#{0.chr}")
 //    verifyProgram("[...[[]]......]", "")
 //    verifyProgram("+++++++++++++++[-].", "#{0.chr}")
 //    verifyProgram("++++++++++++++++[>+++++<-].>.", "#{0.chr}#{80.chr}")
@@ -48,6 +50,12 @@ class InterpreterSpec extends FlatSpec with Matchers {
 
   it can "execute programs with input" in {
     verifyProgram(",+.,-.,.", "blp", "amp")
+  }
+
+  it can "execute programs with a single jump" in {
+    verifyProgram("[.........]", "")
+    verifyProgram(",[-].", Array(0), "X")
+    verifyProgram("++[.-]", Array(2, 1))
   }
 
 }
