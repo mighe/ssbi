@@ -24,8 +24,8 @@ class ProgramExecutor(private val output: java.io.OutputStream, private val inpu
 
     }
 
-    def matchingClosingFor(programCounter: Int): Int = { program.indexOf(']') }
-    def matchingOpeningFor(programCounter: Int): Int = { program.indexOf('[') }
+    def matchingClosingFor(programCounter: Int): Int = { program.indexOf(']', programCounter) }
+    def matchingOpeningFor(programCounter: Int): Int = { program.lastIndexOf('[', programCounter) }
 
   }
 

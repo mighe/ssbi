@@ -58,4 +58,8 @@ class InterpreterSpec extends FlatSpec with Matchers {
     verifyProgram("++[.-]", Array(2, 1))
   }
 
+  it can "execute programs with sequential loops" in {
+    verifyProgram("+++[>++++<-]>[>+++++++<-]>.", "T")
+  }
+
 }
