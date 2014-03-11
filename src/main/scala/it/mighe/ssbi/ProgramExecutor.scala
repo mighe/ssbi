@@ -6,7 +6,7 @@ class ProgramExecutor(private val output: java.io.OutputStream, private val inpu
 
     val tape = new Tape
     var programCounter = 0
-    val matchingBrackets = new scala.collection.mutable.OpenHashMap[Int, Int]
+    val matchingBrackets = new Array[Int](program.length)
 
     for(index <- 0 until program.length) {
       val instruction = program.charAt(index)

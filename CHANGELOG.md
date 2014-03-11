@@ -10,3 +10,7 @@ keeps an internal cache to map bracket pairs, so the program is scanned only the
 
 keeps an internal cache to map bracket pairs with entries computed before program execution
 
+#### 0.4-array_jump_precache
+
+keeps an internal array cache to map bracket pairs with entries computed before program execution
+
