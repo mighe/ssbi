@@ -8,6 +8,15 @@ class ProgramExecutor(private val output: java.io.OutputStream, private val inpu
     var programCounter = 0
     val matchingBrackets = new scala.collection.mutable.OpenHashMap[Int, Int]
 
+    for(index <- 0 until program.length) {
+      val instruction = program.charAt(index)
+
+      if (instruction == '[') {
+        matchingBrackets(index) = scanForMatchingClosing(index)
+        matchingBrackets(matchingBrackets(index)) = index
+      }
+    }
+
     while (programCounter < program.length) {
       val instruction = program.charAt(programCounter)
 
@@ -18,22 +27,11 @@ class ProgramExecutor(private val output: java.io.OutputStream, private val inpu
         case '<' => tape.shiftLeft(); programCounter + 1
         case '.' => output.write(tape.current); programCounter + 1
         case ',' => tape.current = input.read(); programCounter + 1
-        case '[' => if(tape.current == 0) matchingClosingIndexFor(programCounter) else programCounter + 1
-        case ']' => if(tape.current != 0) matchingOpeningIndexFor(programCounter) else programCounter + 1
+        case '[' => if(tape.current == 0) matchingBrackets(programCounter) else programCounter + 1
+        case ']' => if(tape.current != 0) matchingBrackets(programCounter) else programCounter + 1
         case _ => programCounter + 1
       }
 
-    }
-
-
-    def matchingClosingIndexFor(programCounter: Int): Int = {
-
-      if ( ! matchingBrackets.contains(programCounter) ) {
-        matchingBrackets(programCounter) = scanForMatchingClosing(programCounter)
-        matchingBrackets(matchingBrackets(programCounter)) = programCounter
-      }
-
-      matchingBrackets(programCounter)
     }
 
     def scanForMatchingClosing(programCounter: Int): Int = {
@@ -54,30 +52,6 @@ class ProgramExecutor(private val output: java.io.OutputStream, private val inpu
       -1
     }
 
-    def matchingOpeningIndexFor(programCounter: Int): Int = {
-      if ( ! matchingBrackets.contains(programCounter) ) {
-        matchingBrackets(programCounter) = scanForMatchingOpening(programCounter)
-        matchingBrackets(matchingBrackets(programCounter)) = programCounter
-      }
-
-      matchingBrackets(programCounter)
-    }
-
-    def scanForMatchingOpening(programCounter: Int): Int = {
-      var closedCount = 0
-
-      for (index <- programCounter to 0 by -1) {
-        program.charAt(index) match {
-          case '[' => closedCount -= 1
-          case ']' => closedCount += 1
-          case _ => ()
-        }
-
-        if (closedCount == 0) { return index }
-      }
-
-      -1
-    }
 
   }
 
