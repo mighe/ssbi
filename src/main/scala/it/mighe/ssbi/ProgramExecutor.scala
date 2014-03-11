@@ -6,6 +6,7 @@ class ProgramExecutor(private val output: java.io.OutputStream, private val inpu
 
     val tape = new Tape
     var programCounter = 0
+    val matchingBrackets = new scala.collection.mutable.OpenHashMap[Int, Int]
 
     while (programCounter < program.length) {
       val instruction = program.charAt(programCounter)
@@ -24,7 +25,18 @@ class ProgramExecutor(private val output: java.io.OutputStream, private val inpu
 
     }
 
+
     def matchingClosingIndexFor(programCounter: Int): Int = {
+
+      if ( ! matchingBrackets.contains(programCounter) ) {
+        matchingBrackets(programCounter) = scanForMatchingClosing(programCounter)
+        matchingBrackets(matchingBrackets(programCounter)) = programCounter
+      }
+
+      matchingBrackets(programCounter)
+    }
+
+    def scanForMatchingClosing(programCounter: Int): Int = {
       var openedCount = 0
 
       for (index <- programCounter to (program.length - 1)) {
@@ -34,13 +46,24 @@ class ProgramExecutor(private val output: java.io.OutputStream, private val inpu
           case _ => ()
         }
 
-        if (openedCount == 0) { return index }
+        if (openedCount == 0) {
+          return index
+        }
       }
 
       -1
     }
 
     def matchingOpeningIndexFor(programCounter: Int): Int = {
+      if ( ! matchingBrackets.contains(programCounter) ) {
+        matchingBrackets(programCounter) = scanForMatchingOpening(programCounter)
+        matchingBrackets(matchingBrackets(programCounter)) = programCounter
+      }
+
+      matchingBrackets(programCounter)
+    }
+
+    def scanForMatchingOpening(programCounter: Int): Int = {
       var closedCount = 0
 
       for (index <- programCounter to 0 by -1) {
