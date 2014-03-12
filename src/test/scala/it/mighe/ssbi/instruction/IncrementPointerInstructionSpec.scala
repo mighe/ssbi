@@ -2,7 +2,7 @@ package it.mighe.ssbi.instruction
 
 import org.scalatest.{Matchers, FlatSpec}
 import it.mighe.ssbi.Tape
-import it.mighe.ssbi.instructions.{IncrementPointerInstruction, DecrementPointerInstruction}
+import it.mighe.ssbi.instructions.IncrementPointerInstruction
 
 class IncrementPointerInstructionSpec extends FlatSpec with Matchers {
 

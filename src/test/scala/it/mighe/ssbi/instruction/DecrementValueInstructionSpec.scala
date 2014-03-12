@@ -2,7 +2,7 @@ package it.mighe.ssbi.instruction
 
 import org.scalatest.{Matchers, FlatSpec}
 import it.mighe.ssbi.Tape
-import it.mighe.ssbi.instructions.{DecrementValueInstruction, IncrementValueInstruction}
+import it.mighe.ssbi.instructions.DecrementValueInstruction
 
 class DecrementValueInstructionSpec extends FlatSpec with Matchers {
 

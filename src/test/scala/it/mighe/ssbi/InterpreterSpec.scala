@@ -1,7 +1,7 @@
 package it.mighe.ssbi
 
 import org.scalatest.{Matchers, FlatSpec}
-import java.io.{ByteArrayInputStream, InputStream, ByteArrayOutputStream}
+import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
 
 class InterpreterSpec extends FlatSpec with Matchers {
 
