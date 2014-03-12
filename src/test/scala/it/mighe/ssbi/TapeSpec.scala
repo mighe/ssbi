@@ -2,7 +2,7 @@ package it.mighe.ssbi
 
 import org.scalatest.{Matchers, FlatSpec}
 
-class TapeTest extends FlatSpec with Matchers {
+class TapeSpec extends FlatSpec with Matchers {
 
   def fixture = new {
     val tape = new Tape

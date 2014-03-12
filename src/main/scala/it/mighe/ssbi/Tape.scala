@@ -2,8 +2,8 @@ package it.mighe.ssbi
 
 class Tape {
 
-  var pointer = 0
-  val memory = new Array[Byte](30000)
+  private var pointer = 0
+  private val memory = new Array[Byte](30000)
 
   def increment() { memory(pointer) = (memory(pointer) + 1).toByte }
   def decrement() { memory(pointer) = (memory(pointer) - 1).toByte }
