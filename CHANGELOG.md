@@ -14,3 +14,11 @@ keeps an internal cache to map bracket pairs with entries computed before progra
 
 keeps an internal array cache to map bracket pairs with entries computed before program execution
 
+#### 0.5-instruction_on_array
+
+parses source code and create an array of instructions. Every instruction has an `execute(tape, programCounter)` method that returns the updated program counter.
+This implementation is slower that the previous one, surprisingly.
+
+#### 0.6-linked_instructions
+parses source code and create a linked list of instruction. Every instruction has an `execute(tape, programCounter)` method that returns the next instruction.
+Since instructions are built in two steps, they are not fully immutable, but the reference to the following instruction is added later.
