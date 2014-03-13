@@ -1,4 +1,4 @@
-import it.mighe.ssbi.ProgramExecutor
+import it.mighe.ssbi.{Interpreter, ProgramExecutor}
 import java.io.File
 
 object Main extends App {
@@ -12,8 +12,8 @@ object Main extends App {
     Console.println("executing " + programPath.getName + "...")
 
     val program = scala.io.Source.fromFile(programPath).mkString
-    val executor = new ProgramExecutor(System.out, System.in)
-    val elapsedTime = benchmark { executor.execute(program) }
+    val interpreter = new Interpreter(System.out, System.in)
+    val elapsedTime = benchmark { interpreter.execute(program) }
 
     programsExecutionTime(programPath.getName) = elapsedTime
   }

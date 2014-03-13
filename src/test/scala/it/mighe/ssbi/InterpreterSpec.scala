@@ -27,9 +27,9 @@ class InterpreterSpec extends FlatSpec with Matchers {
 
   def verifyProgram(program: String, expectedOutput: Array[Byte], input: java.io.InputStream) {
     val output = new ByteArrayOutputStream()
-    val executor = new ProgramExecutor(output, input)
+    val interpreter = new Interpreter(output, input)
 
-    executor.execute(program)
+    interpreter.execute(program)
     output.toByteArray should equal(expectedOutput)
   }
 
