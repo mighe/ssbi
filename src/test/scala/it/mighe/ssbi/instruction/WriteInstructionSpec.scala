@@ -13,22 +13,6 @@ class WriteInstructionSpec extends FlatSpec with Matchers {
     val instruction = new WriteInstruction(output)
   }
 
-  it should "increment program counter" in {
-    val f = fixture
-
-    val newProgramCounter = f.instruction.execute(f.tape, 42)
-    newProgramCounter should be(43)
-  }
-
-  it should "write current value with program counter" in {
-    val f = fixture
-
-    f.tape.current = 80
-    f.instruction.execute(f.tape, 43)
-
-    f.output.toByteArray should equal(Array[Byte](80))
-  }
-
   it should "return next instruction" in {
     val f = fixture
     val next = new WriteInstruction(f.output)

@@ -8,34 +8,18 @@ class OpeningBracketInstructionSpec extends FlatSpec with Matchers {
 
   def fixture = new {
     val tape = new Tape
-    val instruction = new OpeningBracketInstruction(15)
-    val matching = new ClosingBracketInstruction(0)
+    val instruction = new OpeningBracketInstruction()
+    val matching = new ClosingBracketInstruction()
     instruction.matching = matching
-  }
-
-  it should "increment program counter if current value is not zero with program counter" in {
-    val f = fixture
-    f.tape.increment()
-
-    val newProgramCounter = f.instruction.execute(f.tape, 0)
-    newProgramCounter should be(1)
-  }
-
-  it should "jump to matching closing if current value is zero with program counter" in {
-    val f = fixture
-
-    val newProgramCounter = f.instruction.execute(f.tape, 0)
-    newProgramCounter should be(15)
   }
 
   it should "increment program counter if current value is not zero" in {
     val f = fixture
-    val next = new OpeningBracketInstruction(25)
+    val next = new OpeningBracketInstruction()
     f.instruction.next = next
     f.tape.increment()
 
-    val newProgramCounter = f.instruction.execute(f.tape)
-    newProgramCounter should be(next)
+    f.instruction.execute(f.tape) should be(next)
   }
 
   it should "jump to matching closing if current value is zero" in {

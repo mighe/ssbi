@@ -13,21 +13,6 @@ class ReadInstructionSpec extends FlatSpec with Matchers {
     val instruction = new ReadInstruction(input)
   }
 
-  it should "increment program counter" in {
-    val f = fixture
-
-    val newProgramCounter = f.instruction.execute(f.tape, 57)
-    newProgramCounter should be(58)
-  }
-
-  it should "set current value to read value with program counter" in {
-    val f = fixture
-
-    f.instruction.execute(f.tape, 43)
-
-    f.tape.current should be(50)
-  }
-
   it should "return next instruction" in {
     val f = fixture
     val next = new ReadInstruction(f.input)

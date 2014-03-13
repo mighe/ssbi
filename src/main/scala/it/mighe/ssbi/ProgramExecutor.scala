@@ -4,11 +4,14 @@ class ProgramExecutor(private val output: java.io.OutputStream, private val inpu
 
   def execute(program: Array[Instruction]) {
 
-    val tape = new Tape
-    var programCounter = 0
+    if(program.isEmpty) { return }
 
-    while (programCounter < program.length) {
-      programCounter = program(programCounter).execute(tape, programCounter)
+    val tape = new Tape
+
+    var instruction = program.head
+
+    while (instruction != null) {
+      instruction = instruction.execute(tape)
     }
   }
 
