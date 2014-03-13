@@ -1,18 +1,19 @@
 package it.mighe.ssbi
 
+import scala.annotation.tailrec
+
 class ProgramExecutor(private val output: java.io.OutputStream, private val input: java.io.InputStream) {
 
   def execute(program: Array[Instruction]) {
 
     if(program.isEmpty) { return }
 
-    val tape = new Tape
+    execute(program.head, new Tape)
+  }
 
-    var instruction = program.head
-
-    while (instruction != null) {
-      instruction = instruction.execute(tape)
-    }
+  @tailrec private def execute(instruction: Instruction, tape: Tape) {
+    if(instruction == null) { return }
+    execute(instruction.execute(tape), tape)
   }
 
 }
