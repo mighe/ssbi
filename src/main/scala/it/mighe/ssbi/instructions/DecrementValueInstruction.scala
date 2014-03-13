@@ -8,4 +8,9 @@ class DecrementValueInstruction extends Instruction {
     tape.decrement()
     programCounter + 1
   }
+
+  override def execute(tape: Tape): Instruction = {
+    tape.decrement()
+    next
+  }
 }

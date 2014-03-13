@@ -18,12 +18,29 @@ class DecrementPointerInstructionSpec extends FlatSpec with Matchers {
     newProgramCounter should be(11)
   }
 
-  it should "decrement tape pointer" in {
+  it should "decrement tape pointer with program counter" in {
     val f = fixture
 
     f.tape.shiftRight()
 
     f.instruction.execute(f.tape, 0)
+    f.tape.pointerPosition should be(0)
+  }
+
+  it should "return next instruction" in {
+    val f = fixture
+    val next = new DecrementPointerInstruction
+    f.instruction.next = next
+
+    f.instruction.execute(f.tape) should be(next)
+  }
+
+  it should "decrement tape pointer" in {
+    val f = fixture
+
+    f.tape.shiftRight()
+
+    f.instruction.execute(f.tape)
     f.tape.pointerPosition should be(0)
   }
 

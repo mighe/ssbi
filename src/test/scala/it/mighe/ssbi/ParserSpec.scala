@@ -39,7 +39,9 @@ class ParserSpec extends FlatSpec with Matchers {
     val instructions = parser.parse("+XX-[.]")
     instructions(0) shouldBe an [IncrementValueInstruction]
     instructions(1) shouldBe a [DecrementValueInstruction]
-    instructions(2) shouldBe a [WriteInstruction]
+    instructions(2) shouldBe a [OpeningBracketInstruction]
+    instructions(3) shouldBe a [WriteInstruction]
+    instructions(4) shouldBe a [ClosingBracketInstruction]
   }
 
 }

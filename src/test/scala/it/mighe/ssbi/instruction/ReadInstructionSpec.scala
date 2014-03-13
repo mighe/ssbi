@@ -20,10 +20,26 @@ class ReadInstructionSpec extends FlatSpec with Matchers {
     newProgramCounter should be(58)
   }
 
-  it should "set current value to read value" in {
+  it should "set current value to read value with program counter" in {
     val f = fixture
 
     f.instruction.execute(f.tape, 43)
+
+    f.tape.current should be(50)
+  }
+
+  it should "return next instruction" in {
+    val f = fixture
+    val next = new ReadInstruction(f.input)
+    f.instruction.next = next
+
+    f.instruction.execute(f.tape) should be(next)
+  }
+
+  it should "set current value to read value" in {
+    val f = fixture
+
+    f.instruction.execute(f.tape)
 
     f.tape.current should be(50)
   }

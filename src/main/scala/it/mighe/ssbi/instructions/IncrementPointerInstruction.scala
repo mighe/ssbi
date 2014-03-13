@@ -8,4 +8,9 @@ class IncrementPointerInstruction extends Instruction {
     tape.shiftRight()
     programCounter + 1
   }
+
+  override def execute(tape: Tape): Instruction = {
+    tape.shiftRight()
+    next
+  }
 }

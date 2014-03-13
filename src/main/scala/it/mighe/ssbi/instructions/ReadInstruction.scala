@@ -8,4 +8,9 @@ class ReadInstruction(private val input: java.io.InputStream) extends Instructio
     tape.current = input.read()
     programCounter + 1
   }
+
+  override def execute(tape: Tape): Instruction = {
+    tape.current = input.read()
+    next
+  }
 }

@@ -18,10 +18,26 @@ class IncrementPointerInstructionSpec extends FlatSpec with Matchers {
     newProgramCounter should be(16)
   }
 
-  it should "increment tape pointer" in {
+  it should "increment tape pointer with program counter" in {
     val f = fixture
 
     f.instruction.execute(f.tape, 14)
+    f.tape.pointerPosition should be(1)
+  }
+
+  it should "return next instruction" in {
+    val f = fixture
+    val next = new IncrementPointerInstruction
+    f.instruction.next = next
+
+    val newProgramCounter = f.instruction.execute(f.tape)
+    newProgramCounter should be(next)
+  }
+
+  it should "increment tape pointer" in {
+    val f = fixture
+
+    f.instruction.execute(f.tape)
     f.tape.pointerPosition should be(1)
   }
 

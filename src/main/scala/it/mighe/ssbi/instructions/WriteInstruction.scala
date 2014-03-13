@@ -8,4 +8,9 @@ class WriteInstruction(private val output: java.io.OutputStream) extends Instruc
     output.write( tape.current )
     programCounter + 1
   }
+
+  override def execute(tape: Tape): Instruction = {
+    output.write( tape.current )
+    next
+  }
 }

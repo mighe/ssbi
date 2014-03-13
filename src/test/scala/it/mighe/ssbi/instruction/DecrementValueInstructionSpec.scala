@@ -18,10 +18,26 @@ class DecrementValueInstructionSpec extends FlatSpec with Matchers {
     newProgramCounter should be(6)
   }
 
-  it should "decrement tape at current position" in {
+  it should "decrement tape at current position with program counter" in {
     val f = fixture
 
     f.instruction.execute(f.tape, 0)
+    f.tape.current should be(255.toByte)
+  }
+
+  it should "return next instruction" in {
+    val f = fixture
+    val next = new DecrementValueInstruction
+    f.instruction.next = next
+
+    val newProgramCounter = f.instruction.execute(f.tape, 5)
+    newProgramCounter should be(6)
+  }
+
+  it should "decrement tape at current position" in {
+    val f = fixture
+
+    f.instruction.execute(f.tape)
     f.tape.current should be(255.toByte)
   }
 

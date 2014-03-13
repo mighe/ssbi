@@ -8,4 +8,9 @@ class DecrementPointerInstruction extends Instruction {
     tape.shiftLeft()
     programCounter + 1
   }
+
+  override def execute(tape: Tape): Instruction = {
+    tape.shiftLeft()
+    next
+  }
 }
