@@ -10,6 +10,10 @@ class ClosingBracketInstructionSpec extends FlatSpec with Matchers {
     val tape = new Tape
     val instruction = new ClosingBracketInstruction()
     val matching = new OpeningBracketInstruction()
+
+    val matching_next = new OpeningBracketInstruction()
+    matching.next = matching_next
+
     instruction.matching = matching
   }
 
@@ -23,11 +27,11 @@ class ClosingBracketInstructionSpec extends FlatSpec with Matchers {
     newProgramCounter should be(next)
   }
 
-  it should "jump to matching opening if current value is not zero" in {
+  it should "jump to matching opening next if current value is not zero" in {
     val f = fixture
     f.tape.increment()
 
-    f.instruction.execute(f.tape) should be(f.matching)
+    f.instruction.execute(f.tape) should be(f.matching_next)
   }
 
 }

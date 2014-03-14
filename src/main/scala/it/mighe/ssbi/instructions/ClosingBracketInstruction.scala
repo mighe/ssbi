@@ -8,6 +8,6 @@ class ClosingBracketInstruction() extends Instruction {
   var matching: OpeningBracketInstruction = null
 
   override def execute(tape: Tape): Instruction = {
-    if (tape.current != 0) matching else next
+    if (tape.current != 0) matching.next else next
   }
 }
