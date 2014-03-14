@@ -4,11 +4,8 @@ import scala.annotation.tailrec
 
 class ProgramExecutor(private val output: java.io.OutputStream, private val input: java.io.InputStream) {
 
-  def execute(program: Array[Instruction]) {
-
-    if(program.isEmpty) { return }
-
-    execute(program.head, new Tape)
+  def execute(programHead: Instruction) {
+    execute(programHead, new Tape)
   }
 
   @tailrec private def execute(instruction: Instruction, tape: Tape) {

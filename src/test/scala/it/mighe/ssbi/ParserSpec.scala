@@ -32,17 +32,6 @@ class ParserSpec extends FlatSpec with Matchers {
     instructions(11) shouldBe a [DecrementPointerInstruction]
     instructions(12) shouldBe a [DecrementPointerInstruction]
     instructions(13) shouldBe a [WriteInstruction]
-
-    for(i <- 0 until instructions.length - 1) {
-      instructions(i).next should be(instructions(i + 1))
-    }
-
-    instructions.last.next should be(null)
-
-    instructions(5).asInstanceOf[OpeningBracketInstruction].matching should be(instructions(10))
-    instructions(7).asInstanceOf[OpeningBracketInstruction].matching should be(instructions(9))
-    instructions(10).asInstanceOf[ClosingBracketInstruction].matching should be(instructions(5))
-    instructions(9).asInstanceOf[ClosingBracketInstruction].matching should be(instructions(7))
   }
 
   it should "ignores invalid chars" in {
