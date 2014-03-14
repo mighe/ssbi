@@ -22,3 +22,4 @@ This implementation is slower that the previous one, surprisingly.
 #### 0.6-linked_instructions
 parses source code and create a linked list of instruction. Every instruction has an `execute(tape, programCounter)` method that returns the next instruction.
 Since instructions are built in two steps, they are not fully immutable, but the reference to the following instruction is added later.
+A matching bracket optimization has been implemented as well
