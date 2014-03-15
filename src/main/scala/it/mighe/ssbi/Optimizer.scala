@@ -12,23 +12,15 @@ class Optimizer {
     var index = 0
 
     while(index < program.length) {
-      program(index) match {
-        case x: AdjustValueInstruction =>
-          val result = compactValueSequence(program, index)
-          optimized += result._1
-          index += result._2
-        case x: AdjustPointerInstruction =>
-          val result = compactShiftSequence(program, index)
-          optimized += result._1
-          index += result._2
-        case x: OpeningBracketInstruction =>
-          val result = compactLoop(program, index)
-          optimized += result._1
-          index += result._2
-        case x =>
-          optimized += x
-          index += 1
+      val result = program(index) match {
+        case x: AdjustValueInstruction => compactValueSequence(program, index)
+        case x: AdjustPointerInstruction => compactShiftSequence(program, index)
+        case x: OpeningBracketInstruction => compactLoop(program, index)
+        case x => (x, 1)
       }
+
+      optimized += result._1
+      index += result._2
     }
 
 
