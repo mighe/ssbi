@@ -3,10 +3,10 @@ package it.mighe.ssbi.instructions
 import it.mighe.ssbi.Instruction
 import it.mighe.ssbi.Tape
 
-class IncrementValueInstruction extends Instruction {
+class AdjustValueInstruction(val offset: Int) extends Instruction {
 
   override def execute(tape: Tape): Instruction = {
-    tape.increment()
+    tape.adjustValue(offset)
     next
   }
 }

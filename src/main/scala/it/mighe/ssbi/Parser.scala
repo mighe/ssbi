@@ -22,10 +22,10 @@ class Parser(private val output: java.io.OutputStream, private val input: java.i
       val instruction = cleanedProgram.charAt(index)
 
       val instructionObject = instruction match {
-        case '+' => new IncrementValueInstruction
-        case '-' => new DecrementValueInstruction
-        case '>' => new IncrementPointerInstruction
-        case '<' => new DecrementPointerInstruction
+        case '+' => new AdjustValueInstruction(1)
+        case '-' => new AdjustValueInstruction(-1)
+        case '>' => new AdjustPointerInstruction(1)
+        case '<' => new AdjustPointerInstruction(-1)
         case '.' => new WriteInstruction(output)
         case ',' => new ReadInstruction(input)
         case '[' => new OpeningBracketInstruction()

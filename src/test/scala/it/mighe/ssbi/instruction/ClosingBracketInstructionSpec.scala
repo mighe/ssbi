@@ -18,7 +18,7 @@ class ClosingBracketInstructionSpec extends FlatSpec with Matchers {
   }
 
 
-  it should "increment program counter if current value is zero" in {
+  it should "return next instruction if current value is zero" in {
     val f = fixture
     val next = new ClosingBracketInstruction()
     f.instruction.next = next

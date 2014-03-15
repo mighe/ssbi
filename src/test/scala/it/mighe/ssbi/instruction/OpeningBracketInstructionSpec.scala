@@ -16,7 +16,7 @@ class OpeningBracketInstructionSpec extends FlatSpec with Matchers {
     instruction.matching = matching
   }
 
-  it should "increment program counter if current value is not zero" in {
+  it should "return next instruction if current value is not zero" in {
     val f = fixture
     val next = new OpeningBracketInstruction()
     f.instruction.next = next
