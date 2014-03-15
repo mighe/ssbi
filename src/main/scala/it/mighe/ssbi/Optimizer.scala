@@ -1,7 +1,7 @@
 package it.mighe.ssbi
 
 import scala.collection.mutable.ArrayBuffer
-import it.mighe.ssbi.instructions.{AdjustPointerInstruction, AdjustValueInstruction}
+import it.mighe.ssbi.instructions._
 
 class Optimizer {
   def optimize(program: Array[Instruction]): Array[Instruction] = {
@@ -19,6 +19,10 @@ class Optimizer {
           index += result._2
         case x: AdjustPointerInstruction =>
           val result = compactShiftSequence(program, index)
+          optimized += result._1
+          index += result._2
+        case x: OpeningBracketInstruction =>
+          val result = compactLoop(program, index)
           optimized += result._1
           index += result._2
         case x =>
@@ -53,6 +57,26 @@ class Optimizer {
     }
 
     (new AdjustPointerInstruction(sum), length)
+  }
+
+  def compactLoop(program: Array[Instruction], index: Int): (Instruction, Int) = {
+
+    if( program.length - index < 2) {
+      return (program(index), 1)
+    }
+
+    if( program(index).isInstanceOf [OpeningBracketInstruction] &&
+      program(index + 1).isInstanceOf [AdjustValueInstruction] &&
+      program(index + 2).isInstanceOf [ClosingBracketInstruction]) {
+
+      if (program(index + 1).asInstanceOf[AdjustValueInstruction].offset == -1 ) {
+        return (new SetValueInstruction(0), 3)
+      }
+
+    }
+
+
+    (program(index), 1)
   }
 
 }
