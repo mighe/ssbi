@@ -32,7 +32,7 @@ class Optimizer {
     var length = 0
 
     while( (index + length < program.length) && program(index + length).isInstanceOf[AdjustValueInstruction] ) {
-      sum += program(index + length).asInstanceOf[AdjustValueInstruction ].offset
+      sum += program(index + length).asInstanceOf[AdjustValueInstruction ].valueAdjustment
       length += 1
     }
 
@@ -61,7 +61,7 @@ class Optimizer {
       program(index + 1).isInstanceOf [AdjustValueInstruction] &&
       program(index + 2).isInstanceOf [ClosingBracketInstruction]) {
 
-      if (program(index + 1).asInstanceOf[AdjustValueInstruction].offset == -1 ) {
+      if (program(index + 1).asInstanceOf[AdjustValueInstruction].valueAdjustment == -1 ) {
         return (new SetValueInstruction(0), 3)
       }
 

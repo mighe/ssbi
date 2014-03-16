@@ -7,7 +7,9 @@ class Tape {
 
   def increment() { adjustValue(1) }
   def decrement() { adjustValue(-1) }
-  def adjustValue(offset: Int) { memory(pointer) = (memory(pointer) + offset).toByte }
+  def adjustValue(valueAdjustment: Int, pointerOffset: Int = 0) {
+    memory(pointer + pointerOffset) = (memory(pointer + pointerOffset) + valueAdjustment).toByte
+  }
 
   def shiftRight() { adjustPointer(1) }
   def shiftLeft() { adjustPointer(-1) }

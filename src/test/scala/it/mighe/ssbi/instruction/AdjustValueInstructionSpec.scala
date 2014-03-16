@@ -11,7 +11,6 @@ class AdjustValueInstructionSpec extends FlatSpec with Matchers {
     val instruction = new AdjustValueInstruction(7)
   }
 
-
   it should "return next instruction" in {
     val f = fixture
     val next = new AdjustValueInstruction(-4)
@@ -29,6 +28,16 @@ class AdjustValueInstructionSpec extends FlatSpec with Matchers {
     new AdjustValueInstruction(-3).execute(f.tape)
 
     f.tape.current should be(4)
+  }
+
+  it can "have a pointer offset" in {
+    val f = fixture
+    f.tape.shiftRight()
+
+    new AdjustValueInstruction(3, 10).execute(f.tape)
+
+    f.tape.current should be(0)
+    f.tape.at(11) should be(3)
   }
 
 }

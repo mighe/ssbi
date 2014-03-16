@@ -73,7 +73,7 @@ class TapeSpec extends FlatSpec with Matchers {
     f.tape.current should be(1)
   }
 
-  it should "adjust current value" in {
+  it should "adjust current value without offset" in {
     val f = fixture
     f.tape.adjustValue(50)
 
@@ -81,6 +81,20 @@ class TapeSpec extends FlatSpec with Matchers {
 
     f.tape.adjustValue(-10)
     f.tape.current should be(40)
+  }
+
+  it should "adjust current value with offset" in {
+    val f = fixture
+    f.tape.adjustPointer(10)
+
+    f.tape.adjustValue(-10, -3)
+    f.tape.adjustValue(50, 2)
+
+    f.tape.at(7) should be(-10)
+    f.tape.current should be(0)
+    f.tape.at(12) should be(50)
+
+
   }
 
   it should "adjust pointer position" in {

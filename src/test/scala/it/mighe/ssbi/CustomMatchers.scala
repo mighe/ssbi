@@ -11,8 +11,8 @@ trait CustomMatchers {
         case x: SetValueInstruction =>
           val actualValue = x.value
           MatchResult(actualValue == value,
-            s"instruction offset is $actualValue but $value was expected",
-            s"instruction offset is $actualValue is $value"
+            s"instruction value is $actualValue but $value was expected",
+            s"instruction value is $actualValue is $value"
           )
         case y =>
           val actualClass = y.getClass.getName
@@ -27,10 +27,10 @@ trait CustomMatchers {
     override def apply(left: Instruction): MatchResult = {
       left match {
         case x: AdjustValueInstruction =>
-          val actualOffset = x.offset
+          val actualOffset = x.valueAdjustment
           MatchResult(actualOffset == offset,
-            s"instruction offset is $actualOffset but $offset was expected",
-            s"instruction offset is $actualOffset is $offset"
+            s"instruction valueAdjustment is $actualOffset but $offset was expected",
+            s"instruction valueAdjustment is $actualOffset is $offset"
           )
         case y =>
           val actualClass = y.getClass.getName
