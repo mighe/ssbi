@@ -1,3 +1,5 @@
+### 0.x - simple interpreter
+
 #### 0.1-dumb
 
 dumbest implementation, every time rescan the whole program to find the matching bracket
@@ -23,3 +25,9 @@ This implementation is slower that the previous one, surprisingly.
 parses source code and create a linked list of instruction. Every instruction has an `execute(tape, programCounter)` method that returns the next instruction.
 Since instructions are built in two steps, they are not fully immutable, but the reference to the following instruction is added later.
 A matching bracket optimization has been implemented as well
+
+### 1.x - Optimizing interpreter
+
+#### 1.0-fusion_and_zeros
+the optimizer takes instructions and tries to minimize their amount.
+Consecutive increments and shifts are fused, [-] pattern is transformed into a set zero instruction
