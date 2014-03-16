@@ -32,7 +32,7 @@ class Optimizer {
     var length = 0
 
     while( (index + length < program.length) && program(index + length).isInstanceOf[AdjustValueInstruction] ) {
-      sum += program(index + length).asInstanceOf[AdjustValueInstruction].offset
+      sum += program(index + length).asInstanceOf[AdjustValueInstruction ].offset
       length += 1
     }
 
