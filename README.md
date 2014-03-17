@@ -13,7 +13,7 @@ as a precise architectural choice, *maybe* one day the project will switch to mo
 ### Contribute
 I want to improve my Scala proficiency, so feel free to open an issue also to provide style suggestions.
 
-If you want to add to add some feature:
+If you want to add features:
 - fork this repository
 - add specs
 - add code
