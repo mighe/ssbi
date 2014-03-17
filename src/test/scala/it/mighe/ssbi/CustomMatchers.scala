@@ -23,7 +23,7 @@ trait CustomMatchers {
 
   def beAValueInstructionWithValue(offset: Int) = new InstructionWithValue(offset)
 
-  class InstructionWithValueOffset(valueAdjustment: Int, pointerOffset: Int = 0) extends Matcher[Instruction] {
+  class InstructionWithValueOffset(valueAdjustment: Int, pointerOffset: Int) extends Matcher[Instruction] {
     override def apply(left: Instruction): MatchResult = {
       left match {
         case x: AdjustValueInstruction =>
@@ -40,7 +40,9 @@ trait CustomMatchers {
     }
   }
 
-  def beAValueInstructionWithOffset(offset: Int) = new InstructionWithValueOffset(offset)
+  def beAValueInstructionWithOffset(valueAdjustment: Int, pointerOffset: Int = 0) = {
+    new InstructionWithValueOffset(valueAdjustment, pointerOffset)
+  }
 
   class InstructionWithPointerOffset(offset: Int) extends Matcher[Instruction] {
     override def apply(left: Instruction): MatchResult = {
