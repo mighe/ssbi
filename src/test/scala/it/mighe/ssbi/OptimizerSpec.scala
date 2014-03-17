@@ -13,6 +13,11 @@ class OptimizerSpec extends FlatSpec with Matchers {
     val optimizer = new Optimizer
   }
 
+  def parseAndOptimize(source: String) = {
+    val instructions = fixture.parser.parse(source)
+    fixture.optimizer.optimize(instructions)
+  }
+
   it can "optimize an empty program" in {
     val instructions = fixture.optimizer.optimize(Array())
     instructions should equal(Array[Instruction]())
@@ -28,16 +33,14 @@ class OptimizerSpec extends FlatSpec with Matchers {
   }
 
   it should "optimize consecutive increments" in {
-    val instructions = fixture.parser.parse("+++ +++ +++")
-    val optimized = fixture.optimizer.optimize(instructions)
+    val optimized = parseAndOptimize("+++ +++ +++")
 
     optimized should have length 1
     optimized(0) should beAValueInstructionWithOffset(9)
   }
 
   it should "optimize consecutive decrements" in {
-    val instructions = fixture.parser.parse("- . ---")
-    val optimized = fixture.optimizer.optimize(instructions)
+    val optimized = parseAndOptimize("- . ---")
 
     optimized should have length 3
     optimized(0) should beAValueInstructionWithOffset(-1)
@@ -46,16 +49,14 @@ class OptimizerSpec extends FlatSpec with Matchers {
   }
 
   it should "optimize consecutive right shifts" in {
-    val instructions = fixture.parser.parse(">>> >>>")
-    val optimized = fixture.optimizer.optimize(instructions)
+    val optimized = parseAndOptimize(">>> >>>")
 
     optimized should have length 1
     optimized(0) should beAPointerInstructionWithOffset(6)
   }
 
   it should "optimize consecutive left shifts" in {
-    val instructions = fixture.parser.parse(">>> , <<")
-    val optimized = fixture.optimizer.optimize(instructions)
+    val optimized = parseAndOptimize(">>> , <<")
 
     optimized should have length 3
     optimized(0) should beAPointerInstructionWithOffset(3)
@@ -64,8 +65,7 @@ class OptimizerSpec extends FlatSpec with Matchers {
   }
 
   it should "optimize zeroing" in {
-    val instructions = fixture.parser.parse(", [-] , [-] .")
-    val optimized = fixture.optimizer.optimize(instructions)
+    val optimized = parseAndOptimize(", [-] , [-] .")
 
     optimized should have length 5
     optimized(0) shouldBe a [ReadInstruction]
@@ -76,8 +76,7 @@ class OptimizerSpec extends FlatSpec with Matchers {
   }
 
   it should "not optimize empty loops" in {
-    val instructions = fixture.parser.parse("[]")
-    val optimized = fixture.optimizer.optimize(instructions)
+    val optimized = parseAndOptimize("[]")
 
     optimized should have length 2
     optimized(0) shouldBe a [OpeningBracketInstruction]
