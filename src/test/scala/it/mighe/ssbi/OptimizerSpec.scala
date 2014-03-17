@@ -83,4 +83,20 @@ class OptimizerSpec extends FlatSpec with Matchers {
     optimized(1) shouldBe a [ClosingBracketInstruction]
   }
 
+  it should "compact linear sequences" in {
+    val optimized = parseAndOptimize("- >>> ++ << --- >>> ++++")
+    optimized should have length 5
+
+    optimized(0) should beAValueInstructionWithOffset(-1, 0)
+    optimized(1) should beAValueInstructionWithOffset(-3, 1)
+    optimized(2) should beAValueInstructionWithOffset( 2, 3)
+    optimized(3) should beAValueInstructionWithOffset( 4, 4)
+    optimized(4) should beAPointerInstructionWithOffset(4)
+  }
+
+  it should "compact linear sequences removing useless instructions" in {
+    val optimized = parseAndOptimize(">> -+-+-+-+ <<")
+    optimized should have length 0
+  }
+
 }

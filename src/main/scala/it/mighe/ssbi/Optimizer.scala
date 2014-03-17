@@ -2,6 +2,7 @@ package it.mighe.ssbi
 
 import scala.collection.mutable.ArrayBuffer
 import it.mighe.ssbi.instructions._
+import scala.collection.mutable
 
 class Optimizer {
   def optimize(program: Array[Instruction]): Array[Instruction] = {
@@ -13,13 +14,13 @@ class Optimizer {
 
     while(index < program.length) {
       val result = program(index) match {
-        case x: AdjustValueInstruction => compactValueSequence(program, index)
-        case x: AdjustPointerInstruction => compactShiftSequence(program, index)
+        case x: AdjustValueInstruction => compactLinearSequence(program, index)
+        case x: AdjustPointerInstruction => compactLinearSequence(program, index)
         case x: OpeningBracketInstruction => compactLoop(program, index)
-        case x => (x, 1)
+        case x => (Seq(x), 1)
       }
 
-      optimized += result._1
+      optimized ++= result._1
       index += result._2
     }
 
@@ -27,34 +28,47 @@ class Optimizer {
     optimized.toArray
   }
 
-  def compactValueSequence(program: Array[Instruction], index: Int) = {
-    var sum = 0
+  private def compactLinearSequence(program: Array[Instruction], index: Int) = {
+    var pointerOffset = 0
     var length = 0
+    val offsetToAdjustment = new mutable.OpenHashMap[Int, Int]
 
-    while( (index + length < program.length) && program(index + length).isInstanceOf[AdjustValueInstruction] ) {
-      sum += program(index + length).asInstanceOf[AdjustValueInstruction ].valueAdjustment
+    while( (index + length < program.length) && isALinearInstruction(program(index + length)) ) {
+      program(index + length) match {
+        case x: AdjustValueInstruction =>
+          offsetToAdjustment(pointerOffset + x.pointerOffset) =
+            offsetToAdjustment.getOrElse(pointerOffset + x.pointerOffset, 0) + x.valueAdjustment
+        case x: AdjustPointerInstruction => pointerOffset += x.offset
+      }
+
       length += 1
     }
 
-    (new AdjustValueInstruction(sum), length)
-  }
+    val allInstructions = offsetToAdjustment.keys.map( offset => new AdjustValueInstruction(offsetToAdjustment(offset), offset))
+    val significantInstructions: Seq[Instruction] = allInstructions.filter( _.valueAdjustment != 0).toSeq.sortBy( _.pointerOffset)
 
-  def compactShiftSequence(program: Array[Instruction], index: Int) = {
-    var sum = 0
-    var length = 0
-
-    while( (index + length < program.length) && program(index + length).isInstanceOf[AdjustPointerInstruction] ) {
-      sum += program(index + length).asInstanceOf[AdjustPointerInstruction].offset
-      length += 1
+    if(pointerOffset == 0) {
+      (significantInstructions, length)
+    }
+    else {
+      (significantInstructions :+ new AdjustPointerInstruction(pointerOffset), length)
     }
 
-    (new AdjustPointerInstruction(sum), length)
+
   }
 
-  def compactLoop(program: Array[Instruction], index: Int): (Instruction, Int) = {
+  private def isALinearInstruction(instruction: Instruction) = {
+    instruction match {
+      case x: AdjustValueInstruction => true
+      case x: AdjustPointerInstruction => true
+      case _ => false
+    }
+  }
+
+  private def compactLoop(program: Array[Instruction], index: Int): (Seq[Instruction], Int) = {
 
     if( program.length - index < 2) {
-      return (program(index), 1)
+      return (Seq(program(index)), 1)
     }
 
     if( program(index).isInstanceOf [OpeningBracketInstruction] &&
@@ -62,13 +76,12 @@ class Optimizer {
       program(index + 2).isInstanceOf [ClosingBracketInstruction]) {
 
       if (program(index + 1).asInstanceOf[AdjustValueInstruction].valueAdjustment == -1 ) {
-        return (new SetValueInstruction(0), 3)
+        return (Seq(new SetValueInstruction(0)), 3)
       }
 
     }
 
-
-    (program(index), 1)
+    (Seq(program(index)), 1)
   }
 
 }
