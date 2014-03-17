@@ -23,14 +23,15 @@ trait CustomMatchers {
 
   def beAValueInstructionWithValue(offset: Int) = new InstructionWithValue(offset)
 
-  class InstructionWithValueOffset(offset: Int) extends Matcher[Instruction] {
+  class InstructionWithValueOffset(valueAdjustment: Int, pointerOffset: Int = 0) extends Matcher[Instruction] {
     override def apply(left: Instruction): MatchResult = {
       left match {
         case x: AdjustValueInstruction =>
-          val actualOffset = x.valueAdjustment
-          MatchResult(actualOffset == offset,
-            s"instruction valueAdjustment is $actualOffset but $offset was expected",
-            s"instruction valueAdjustment is $actualOffset is $offset"
+          val actualAdjustment = x.valueAdjustment
+          val actualOffset = x.pointerOffset
+          MatchResult(actualAdjustment == valueAdjustment && actualOffset == pointerOffset,
+            s"instruction is AdjustValueInstruction($actualAdjustment, $actualOffset) but AdjustValueInstruction($valueAdjustment, $pointerOffset) was expected",
+            s"instruction is AdjustValueInstruction($valueAdjustment, $pointerOffset)"
           )
         case y =>
           val actualClass = y.getClass.getName
