@@ -10,6 +10,15 @@ the `ProgramExecutor` executes them.
 At the moment ssbi does not rely on compiler theory, even if it could be very useful: consider this
 as a precise architectural choice, *maybe* one day the project will switch to more formal algorithms.
 
+### Contribute
+I want to improve my Scala proficiency, so feel free to open an issue also to provide style suggestions.
+
+If you want to add to add some feature:
+- fork this repository
+- add specs
+- add code
+- open a pull request
+
 ### Credits
 
 Sample programs from https://github.com/gokselgoktas/brainfuck/tree/master/examples
@@ -24,3 +33,6 @@ Sample programs from https://github.com/gokselgoktas/brainfuck/tree/master/examp
 - http://esolangs.org/wiki/Brainfuck_implementations
 - http://esolangs.org/wiki/brainfuck
 - http://nayuki.eigenstate.org/page/optimizing-brainfuck-compiler
+
+### License
+All ssbi code is under MIT license
