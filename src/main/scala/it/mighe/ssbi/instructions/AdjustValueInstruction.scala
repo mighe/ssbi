@@ -9,4 +9,8 @@ class AdjustValueInstruction(val valueAdjustment: Int, val pointerOffset: Int = 
     tape.adjustValue(valueAdjustment, pointerOffset)
     next
   }
+
+  override def toString = {
+    s"AdjustValueInstruction(valueAdjustment: $valueAdjustment, pointerOffset: $pointerOffset)"
+  }
 }

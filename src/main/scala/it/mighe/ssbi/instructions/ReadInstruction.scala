@@ -9,4 +9,8 @@ class ReadInstruction(private val input: java.io.InputStream) extends Instructio
     tape.current = input.read()
     next
   }
+
+  override def toString = {
+    s"ReadInstruction"
+  }
 }

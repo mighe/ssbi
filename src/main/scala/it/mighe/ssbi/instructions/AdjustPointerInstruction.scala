@@ -9,4 +9,8 @@ class AdjustPointerInstruction(val offset: Int) extends Instruction {
     tape.adjustPointer(offset)
     next
   }
+
+  override def toString = {
+    s"AdjustPointerInstruction(offset: $offset)"
+  }
 }

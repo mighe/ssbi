@@ -9,4 +9,8 @@ class WriteInstruction(private val output: java.io.OutputStream) extends Instruc
     output.write( tape.current )
     next
   }
+
+  override def toString = {
+    s"WriteInstruction"
+  }
 }

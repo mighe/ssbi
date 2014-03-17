@@ -9,4 +9,8 @@ class SetValueInstruction(val value: Int) extends Instruction {
     tape.current = value
     next
   }
+
+  override def toString = {
+    s"SetValueInstruction(value: $value)"
+  }
 }

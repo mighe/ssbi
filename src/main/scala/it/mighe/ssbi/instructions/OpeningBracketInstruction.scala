@@ -10,4 +10,8 @@ class OpeningBracketInstruction() extends Instruction {
   override def execute(tape: Tape): Instruction = {
     if (tape.current == 0) matching.next else next
   }
+
+  override def toString = {
+    s"OpeningBracketInstruction"
+  }
 }
