@@ -44,14 +44,16 @@ class Optimizer {
       length += 1
     }
 
-    val allInstructions = offsetToAdjustment.keys.map( offset => new AdjustValueInstruction(offsetToAdjustment(offset), offset))
-    val significantInstructions: Seq[Instruction] = allInstructions.filter( _.valueAdjustment != 0).toSeq.sortBy( _.pointerOffset)
+    val valueInstructions: Seq[Instruction] =
+      offsetToAdjustment.filter( _._2 != 0 ).
+        keys.map( offset => new AdjustValueInstruction(offsetToAdjustment(offset), offset)).
+        toSeq.sortBy( _.pointerOffset)
 
     if(pointerOffset == 0) {
-      (significantInstructions, length)
+      (valueInstructions, length)
     }
     else {
-      (significantInstructions :+ new AdjustPointerInstruction(pointerOffset), length)
+      (valueInstructions :+ new AdjustPointerInstruction(pointerOffset), length)
     }
 
 
