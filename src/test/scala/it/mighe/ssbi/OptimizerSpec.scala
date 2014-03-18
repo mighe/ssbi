@@ -1,33 +1,36 @@
 package it.mighe.ssbi
 
-import org.scalatest.{Matchers, FlatSpec}
+import org.scalatest.{BeforeAndAfter, Matchers, FlatSpec}
 import it.mighe.ssbi.instructions._
 import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream
 import java.io.ByteArrayInputStream
 import CustomMatchers._
 
-class OptimizerSpec extends FlatSpec with Matchers {
+class OptimizerSpec extends FlatSpec with Matchers with BeforeAndAfter {
 
-  def fixture = new {
-    val parser = new Parser(new ByteOutputStream(), new ByteArrayInputStream(Array()))
-    val optimizer = new Optimizer
+  var parser: Parser = _
+  var optimizer: Optimizer = _
+
+  before {
+    parser = new Parser(new ByteOutputStream(), new ByteArrayInputStream(Array()))
+    optimizer = new Optimizer
   }
 
   def parseAndOptimize(source: String) = {
-    val instructions = fixture.parser.parse(source)
-    fixture.optimizer.optimize(instructions)
+    val instructions = parser.parse(source)
+    optimizer.optimize(instructions)
   }
 
   it can "optimize an empty program" in {
-    val instructions = fixture.optimizer.optimize(Array())
+    val instructions = optimizer.optimize(Array())
     instructions should equal(Array[Instruction]())
   }
 
   it should "not modify input array" in {
     val source = "+++ +++ +++ , [-] >> . "
-    val instructions = fixture.parser.parse(source)
+    val instructions = parser.parse(source)
 
-    fixture.optimizer.optimize(instructions)
+    optimizer.optimize(instructions)
 
     instructions should have length 16
   }
