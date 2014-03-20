@@ -58,6 +58,11 @@ class TapeSpec extends FlatSpec with Matchers with BeforeAndAfter {
     tape.current should be(5)
   }
 
+  it should "assign with offset" in {
+    tape.setAt(50, 30)
+    tape.at(30) should be(50)
+  }
+
   it should "wrap current value" in {
     tape.current = 257
     tape.current should be(1)
@@ -81,8 +86,6 @@ class TapeSpec extends FlatSpec with Matchers with BeforeAndAfter {
     tape.at(7) should be(-10)
     tape.current should be(0)
     tape.at(12) should be(50)
-
-
   }
 
   it should "adjust pointer position" in {

@@ -1,7 +1,7 @@
 package it.mighe.ssbi
 
 import org.scalatest.matchers.{MatchResult, Matcher}
-import it.mighe.ssbi.instructions.{SetValueInstruction, AdjustPointerInstruction, AdjustValueInstruction}
+import it.mighe.ssbi.instructions.{MultiplyCurrentAndSumInstruction, SetValueInstruction, AdjustPointerInstruction, AdjustValueInstruction}
 
 trait CustomMatchers {
 
@@ -61,6 +61,27 @@ trait CustomMatchers {
   }
 
   def beAPointerInstructionWithOffset(offset: Int) = new InstructionWithPointerOffset(offset)
+
+  class InstructionWithMultiplierOffset(multiplier: Int, pointerOffset: Int) extends Matcher[Instruction] {
+    override def apply(left: Instruction): MatchResult = {
+      left match {
+        case x: MultiplyCurrentAndSumInstruction =>
+          val actualMultiplier = x.multiplier
+          val actualOffset = x.pointerOffset
+          MatchResult(actualMultiplier == multiplier && actualOffset == pointerOffset,
+            s"instruction is MultiplyCurrentAndSumInstruction($multiplier, $actualOffset) but MultiplyCurrentAndSumInstruction($actualMultiplier, $pointerOffset) was expected",
+            s"instruction is MultiplyCurrentAndSumInstruction($multiplier, $pointerOffset)"
+          )
+        case y =>
+          val actualClass = y.getClass.getName
+          MatchResult(matches = false, s"instruction is a $actualClass not an MultiplyCurrentAndSumInstruction", "")
+      }
+    }
+  }
+
+  def beAMultiplyInstructionWithOffset(multiplier: Int, pointerOffset: Int) = {
+    new InstructionWithMultiplierOffset(multiplier, pointerOffset)
+  }
 
 }
 

@@ -19,6 +19,7 @@ class Tape {
   def current_=(value: Int) { memory(pointer) = value.toByte }
 
   def at(position: Int) = { memory(position) }
+  def setAt(value: Int, position: Int) { memory(position) = value.toByte }
   def pointerPosition = { pointer }
 
 }
