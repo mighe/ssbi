@@ -30,4 +30,10 @@ class MultiplyCurrentAndSumInstructionSpec extends FlatSpec with Matchers with B
     tape.at(4) should be(16)
   }
 
+  it should "do nothing if current is zero" in {
+    instruction = new MultiplyCurrentAndSumInstruction(-3, -3)
+
+    instruction.execute(tape)
+  }
+
 }

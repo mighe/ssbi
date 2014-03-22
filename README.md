@@ -9,6 +9,8 @@ the `ProgramExecutor` executes them.
 
 At the moment ssbi does not rely on compiler theory, even if it could be very useful: consider this
 as a precise architectural choice, *maybe* one day the project will switch to more formal algorithms.
+For example, Optimizer uses a two pass algorithm: the first time it optimizes linear sequences, the second time
+it optimizes loops. Using a *real* parser this can be done in one single pass.
 
 ### Contribute
 I want to improve my Scala proficiency, so feel free to open an issue also to provide style suggestions.

@@ -67,4 +67,8 @@ class InterpreterSpec extends FlatSpec with Matchers {
     verifyProgram("++[XXX>++[XXX.-]XXX<-]", Array(2, 1, 2, 1))
   }
 
+  it can "execute programs with potential negative offset" in {
+    verifyProgram("[- << + >> ].", Array(0))
+  }
+
 }

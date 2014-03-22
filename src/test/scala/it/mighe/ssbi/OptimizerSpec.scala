@@ -102,4 +102,24 @@ class OptimizerSpec extends FlatSpec with Matchers with BeforeAndAfter {
     optimized should have length 0
   }
 
+  it can "optimize linear loops" in {
+    val optimized = parseAndOptimize("[- >> ++ > + << --- <]")
+    optimized should have length 4
+
+    optimized(0) should beAMultiplyInstructionWithOffset(-3, 1)
+    optimized(1) should beAMultiplyInstructionWithOffset(2, 2)
+    optimized(2) should beAMultiplyInstructionWithOffset(1, 3)
+    optimized(3) should beAValueInstructionWithValue(0)
+  }
+
+  it can "optimize linear loops with unordered instructions" in {
+    val optimized = parseAndOptimize("[>> ++ << - >>> + << --- <]")
+    optimized should have length 4
+
+    optimized(0) should beAMultiplyInstructionWithOffset(-3, 1)
+    optimized(1) should beAMultiplyInstructionWithOffset(2, 2)
+    optimized(2) should beAMultiplyInstructionWithOffset(1, 3)
+    optimized(3) should beAValueInstructionWithValue(0)
+  }
+
 }

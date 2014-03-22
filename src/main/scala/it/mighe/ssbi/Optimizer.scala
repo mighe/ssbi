@@ -6,6 +6,10 @@ import scala.collection.mutable
 
 class Optimizer {
   def optimize(program: Array[Instruction]): Array[Instruction] = {
+    optimizeLoops( optimizeLinearSequences(program) )
+  }
+
+  private def optimizeLinearSequences(program: Array[Instruction]): Array[Instruction] = {
     if(program.isEmpty) return program
 
     val optimized = new ArrayBuffer[Instruction]()
@@ -16,6 +20,26 @@ class Optimizer {
       val result = program(index) match {
         case x: AdjustValueInstruction => compactLinearSequence(program, index)
         case x: AdjustPointerInstruction => compactLinearSequence(program, index)
+        case x => (Seq(x), 1)
+      }
+
+      optimized ++= result._1
+      index += result._2
+    }
+
+
+    optimized.toArray
+  }
+
+  private def optimizeLoops(program: Array[Instruction]): Array[Instruction] = {
+    if(program.isEmpty) return program
+
+    val optimized = new ArrayBuffer[Instruction]()
+
+    var index = 0
+
+    while(index < program.length) {
+      val result = program(index) match {
         case x: OpeningBracketInstruction => compactLoop(program, index)
         case x => (Seq(x), 1)
       }
@@ -69,21 +93,56 @@ class Optimizer {
 
   private def compactLoop(program: Array[Instruction], index: Int): (Seq[Instruction], Int) = {
 
-    if( program.length - index < 2) {
-      return (Seq(program(index)), 1)
-    }
+    val linearAdjustmentSequenceLength = valueAdjustmentSequenceLength(program, index + 1)
 
     if( program(index).isInstanceOf [OpeningBracketInstruction] &&
-      program(index + 1).isInstanceOf [AdjustValueInstruction] &&
-      program(index + 2).isInstanceOf [ClosingBracketInstruction]) {
+      linearAdjustmentSequenceLength > 0 &&
+      program(index + linearAdjustmentSequenceLength + 1).isInstanceOf [ClosingBracketInstruction]) {
 
-      if (program(index + 1).asInstanceOf[AdjustValueInstruction].valueAdjustment == -1 ) {
-        return (Seq(new SetValueInstruction(0)), 3)
+      if (currentDecrementInSequence(program, index + 1, linearAdjustmentSequenceLength)) {
+        val o = optimizeLinearLoopBody(program, index + 1, linearAdjustmentSequenceLength)
+        return (o, linearAdjustmentSequenceLength + 2)
       }
 
     }
 
     (Seq(program(index)), 1)
+  }
+
+  def valueAdjustmentSequenceLength(program: Array[Instruction], startingIndex: Int) = {
+    var length = 0
+
+    while(program(startingIndex + length).isInstanceOf[AdjustValueInstruction]) {
+      length += 1
+    }
+
+    length
+  }
+
+  def currentDecrementInSequence(program: Array[Instruction], startIndex: Int, length: Int): Boolean = {
+    for( index <- startIndex until (startIndex + length) ) {
+      val instruction = program(index).asInstanceOf[AdjustValueInstruction]
+      if (instruction.pointerOffset == 0 && instruction.valueAdjustment == -1) {
+        return true
+      }
+    }
+
+    false
+  }
+
+  def optimizeLinearLoopBody(program: Array[Instruction], startIndex: Int, length: Int) = {
+    val optimized = new ArrayBuffer[Instruction]()
+
+    for( index <- startIndex until (startIndex + length) ) {
+      val instruction = program(index).asInstanceOf[AdjustValueInstruction]
+      if (instruction.pointerOffset != 0) {
+        optimized += new MultiplyCurrentAndSumInstruction(instruction.valueAdjustment, instruction.pointerOffset)
+      }
+    }
+
+    optimized += new SetValueInstruction(0)
+
+    optimized.toSeq
   }
 
 }

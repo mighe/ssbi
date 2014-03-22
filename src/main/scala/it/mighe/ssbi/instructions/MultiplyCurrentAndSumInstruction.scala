@@ -6,7 +6,9 @@ import it.mighe.ssbi.{Tape, Instruction}
 class MultiplyCurrentAndSumInstruction(val multiplier: Int, val pointerOffset: Int) extends Instruction {
 
   override def execute(tape: Tape): Instruction = {
-    tape.adjustValue( tape.current * multiplier , pointerOffset)
+    if (tape.current != 0) {
+      tape.adjustValue(tape.current * multiplier, pointerOffset)
+    }
     next
   }
 
